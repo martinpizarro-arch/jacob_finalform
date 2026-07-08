@@ -299,7 +299,7 @@ footer{border-top:1px solid var(--border);padding:20px 52px;display:flex;align-i
         <div class="hl"></div>
         <div class="fg"><label>Tu nombre *</label><input id="f-nombre" type="text" placeholder="Nombre y apellido" autocomplete="name"/></div>
         <div class="fg"><label>Correo de contacto *</label><input id="f-email" type="email" placeholder="tu@empresa.com" autocomplete="email"/><div class="fhint">Enviaremos el reporte a este correo</div></div>
-        <div class="br"><button class="bp" onclick="window.goTo(1)">Continuar →</button></div>
+        <div class="br"><button class="bp" onclick="goTo(1)">Continuar →</button></div>
       </div>
       <!-- 02 -->
       <div class="fp" id="fp1">
@@ -323,7 +323,7 @@ footer{border-top:1px solid var(--border);padding:20px 52px;display:flex;align-i
             <option>Alta — más del 30% de ingresos</option>
           </select>
         </div>
-        <div class="br"><button class="bg" onclick="window.goTo(0)">← Atrás</button><button class="bp" onclick="window.goTo(2)">Continuar →</button></div>
+        <div class="br"><button class="bg" onclick="goTo(0)">← Atrás</button><button class="bp" onclick="goTo(2)">Continuar →</button></div>
       </div>
       <!-- 03 TIEMPO -->
       <div class="fp" id="fp2">
@@ -336,7 +336,7 @@ footer{border-top:1px solid var(--border);padding:20px 52px;display:flex;align-i
         <div class="fg"><label>M3 — ¿Cuántas veces por semana explicas algo que ya explicaste antes?</label><input id="f-repeticiones" type="number" placeholder="8" min="0"/></div>
         <div class="fg"><label>M4 — ¿Cuántas horas por semana haces seguimiento individual de tu equipo?</label><input id="f-seguimiento" type="number" placeholder="5" min="0"/></div>
         <div class="fg"><label>M5 — ¿Cuántas horas por semana dedicas a motivar, alinear o resolver conflictos del equipo?</label><input id="f-cultura" type="number" placeholder="3" min="0"/></div>
-        <div class="br"><button class="bg" onclick="window.goTo(1)">← Atrás</button><button class="bp" onclick="window.goTo(3)">Continuar →</button></div>
+        <div class="br"><button class="bg" onclick="goTo(1)">← Atrás</button><button class="bp" onclick="goTo(3)">Continuar →</button></div>
       </div>
       <!-- 04 -->
       <div class="fp" id="fp3">
@@ -356,16 +356,16 @@ footer{border-top:1px solid var(--border);padding:20px 52px;display:flex;align-i
             <div class="ko" onclick="this.classList.toggle('sel')"><div class="kb"></div>Procesos / sistemas</div>
           </div>
         </div>
-        <div class="br"><button class="bg" onclick="window.goTo(2)">← Atrás</button><button class="bp" onclick="window.goTo(4)">Revisar →</button></div>
+        <div class="br"><button class="bg" onclick="goTo(2)">← Atrás</button><button class="bp" onclick="goTo(4)">Revisar →</button></div>
       </div>
       <!-- 05 -->
       <div class="fp" id="fp4">
         <div class="sh"><div class="sey">05 — Revisión</div><div class="st">Confirma y<br><em>envía</em></div><div class="ss">Revisa que todo esté correcto antes de enviar</div></div>
         <div class="rcard" id="rcard"></div>
         <p style="font-size:11px;color:#444;line-height:1.85;font-weight:300">Al enviar, nuestro equipo analizará tu información contra los benchmarks de tu industria para identificar los errores sistémicos que frenan tu crecimiento.</p>
-        <button class="bsub" id="sub-btn" onclick="window.submitForm()">✓ Enviar diagnóstico</button>
+        <button class="bsub" id="sub-btn" onclick="submitForm()">✓ Enviar diagnóstico</button>
         <p class="disc">Información estrictamente confidencial · Solo la ve el equipo de Jacob</p>
-        <div class="br" style="margin-top:14px"><button class="bg" onclick="window.goTo(3)">← Editar respuestas</button></div>
+        <div class="br" style="margin-top:14px"><button class="bg" onclick="goTo(3)">← Editar respuestas</button></div>
       </div>
     </div>
   </div>
@@ -424,7 +424,9 @@ footer{border-top:1px solid var(--border);padding:20px 52px;display:flex;align-i
   </div>
 </div>
 
+
 <script>
+console.log('Jacob Form v3.0 - goTo loaded');
 const PASS='jacob2025';
 const BM={
   retail:'Benchmarks Retail: margen bruto 40-55%, churn mensual <4%, costos fijos <60%, win rate >30%, NPS 35-50.',
@@ -437,8 +439,8 @@ const STEPS=['Procesando formulario...','Comparando benchmarks...','Identificand
 const W=['0%','33%','66%','100%'];
 let db=[],cur=null,wmc=0,wmt=null;
 
-async window.saveDB = function(){try{localStorage.setItem('jco-db',JSON.stringify(db));}catch(e){}}
-window.loadDB = function(){try{const s=localStorage.getItem('jco-db');if(s)db=JSON.parse(s);}catch(e){db=[];}refreshList();}
+async function saveDB(){try{localStorage.setItem('jco-db',JSON.stringify(db));}catch(e){}}
+function loadDB(){try{const s=localStorage.getItem('jco-db');if(s)db=JSON.parse(s);}catch(e){db=[];}refreshList();}
 function showSc(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo({top:0,behavior:'smooth'});}
 function wmClick(){wmc++;clearTimeout(wmt);wmt=setTimeout(()=>wmc=0,2000);if(wmc>=5){wmc=0;showSc('s-login');setTimeout(()=>document.getElementById('lpass').focus(),100);}}
 function doLogin(){
@@ -447,7 +449,7 @@ function doLogin(){
   else{e.style.display='block';document.getElementById('lpass').value='';}
 }
 function logout(){showSc('s-intake');}
-window.goTo = function(n){
+function goTo(n){
   const emp=gv('f-emp'),nom=gv('f-nombre'),email=gv('f-email'),pain=gv('f-pain');
   if(n>=1&&!emp){alert('Ingresa el nombre de tu empresa.');return;}
   if(n>=1&&!nom){alert('Ingresa tu nombre.');return;}
@@ -460,13 +462,13 @@ window.goTo = function(n){
   ['pl0','pl1','pl2','pl3','pl4'].forEach((id,i)=>{const el=document.getElementById(id);if(!el)return;el.classList.remove('active','done');if(i<n)el.classList.add('done');else if(i===n)el.classList.add('active');});
   window.scrollTo({top:0,behavior:'smooth'});
 }
-window.gv = function(id){return(document.getElementById(id)||{}).value||'';}
-window.buildRev = function(){
+function gv(id){return(document.getElementById(id)||{}).value||'';}
+function buildRev(){
   const kpis=[...document.querySelectorAll('#kpig .ko.sel')].map(el=>el.textContent.trim()).join(', ')||'—';
   const rows=[['Empresa',gv('f-emp')],['Industria',gv('f-ind')||'—'],['Empleados',gv('f-emps')||'—'],['Ciudad',gv('f-ciudad')||'—'],['Contacto',gv('f-nombre')],['Correo',gv('f-email')],['Ingresos',gv('f-rev')?'$'+gv('f-rev'):'—'],['Margen bruto',gv('f-mg')?gv('f-mg')+'%':'—'],['Crecimiento',gv('f-crec')?gv('f-crec')+'%':'—'],['Churn mensual',gv('f-churn')?gv('f-churn')+'%':'—'],['Áreas clave',kpis]];
   document.getElementById('rcard').innerHTML=rows.map(([k,v])=>`<div class="rrow"><span class="rk">${k}</span><span class="rv">${v}</span></div>`).join('');
 }
-async window.submitForm = function(){
+async function submitForm(){
   const btn=document.getElementById('sub-btn');
   btn.disabled=true;
   btn.innerHTML='<span style="display:inline-block;animation:spin 1s linear infinite">⟳</span> Enviando…';
@@ -479,7 +481,7 @@ async window.submitForm = function(){
   document.getElementById('done-outer').style.display='block';
   window.scrollTo({top:0,behavior:'smooth'});
 }
-async window.sendToNotion = function(rec) {
+async function sendToNotion(rec) {
   try {
     await fetch('/api/notion', {
       method: 'POST',
@@ -511,7 +513,7 @@ async window.sendToNotion = function(rec) {
   }
 }
 
-async window.runAI = function(rec){
+async function runAI(rec){
   const ROADMAP=`
 ROADMAP DE JACOB — CONTEXTO PARA EL ANALISIS:
 
